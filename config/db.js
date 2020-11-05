@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const connectDB = async(config) => {
     try {
-        const conn = await mongoose.connect('mongodb+srv://zoomcarapi:mycarapi123098@cluster0.valgj.mongodb.net/<dbname>?retryWrites=true&w=majority', {
+        const conn = await mongoose.connect('mongodb://localhost:27017/zoomcarAPI', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false
