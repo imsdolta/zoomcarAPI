@@ -4,16 +4,15 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const mongoose = require('mongoose')
 
-// Load User 
-// Load User model
 const User = mongoose.model('User');
 
 router.get('/', async(req, res) => {
-    await User.deleteMany({})
-    res.json("hello world")
+    res.json("Welcome to zoomCar.com")
 })
 
-// Register
+// @desc register 
+// @route POST /register
+
 router.post('/register', (req, res) => {
     const { username, email, password, password2 } = req.body;
     let errors = [];
@@ -56,18 +55,21 @@ router.post('/register', (req, res) => {
                         })
                         .catch(err => console.log(err));
                 });
-
             }
         });
     }
 });
 
-
-// Login
+// @desc login
+// @route POST /login
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', function(err, user, info) {
-        if (err) { return next(err); }
-        if (!user) { return res.send("cannot login"); }
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.send("cannot login ");
+        }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             return res.send("user " + user.username + " logged in");
@@ -75,7 +77,8 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-// Logout
+// @desc logout
+// @route GET /logout
 router.get('/logout', (req, res) => {
     req.logout();
     res.send("logged out")

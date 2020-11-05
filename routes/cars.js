@@ -8,7 +8,7 @@ const { ensureAuthenticated } = require('../config/auth');
 
 
 // Find all cars that are not rented
-router.get('/', async(req, res) => {
+router.get('/', ensureAuthenticated, async(req, res) => {
     const cars = await Car.find({
         $or: [{
             "isRented": false
@@ -18,8 +18,8 @@ router.get('/', async(req, res) => {
 });
 
 
-// @desc GET fetch all bookings for current user
-//  @route /booking  
+// @desc  fetch all bookings for current user
+// @route GET /booking  
 router.get('/booking', ensureAuthenticated, async(req, res) => {
     let id = req.user._id
         // const cars = await User.find({ "user": userId}).populate('Car')
@@ -44,8 +44,8 @@ router.get('/booking', ensureAuthenticated, async(req, res) => {
 })
 
 
-// @desc POST book the car given model number
-//  @route /booking 
+// @desc  book the car given model number
+//  @route  POST /booking 
 router.post('/booking', ensureAuthenticated, (req, res) => {
     let id = req.body.carId
     let userId = req.user._id
@@ -60,12 +60,14 @@ router.post('/booking', ensureAuthenticated, (req, res) => {
                 user.save().then(() => {
                     foundCar.isRented = true
                     foundCar.save().then(() => {
+
                         RentedCarInfo = {
                             car: foundCar._id,
                             user: userId,
                             date: req.body.rentalDate,
                             days: req.body.rentalDays
                         }
+
                         console.log(RentedCarInfo)
                         rentedCar.create(RentedCarInfo).then(() => { //save to db
                             res.send("car was booked")
@@ -80,6 +82,8 @@ router.post('/booking', ensureAuthenticated, (req, res) => {
     })
 })
 
+// @desc  get car given model number
+//  @route  POST /booking 
 router.get('/:id', ensureAuthenticated, async(req, res) => {
     try {
         let id = req.params.id
@@ -97,7 +101,7 @@ router.get('/:id', ensureAuthenticated, async(req, res) => {
             res.send("car with Model number " + req.params.id + " does not exist")
         }
     } catch (err) {
-        console.log(err)
+        res.send("something went wrong")
     }
 })
 

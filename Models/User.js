@@ -14,9 +14,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    roles: [{ // May not need it later
-        type: mongoose.Schema.Types.String
-    }],
     rentedCars: [{
         type: ObjectId,
         ref: 'Car'
