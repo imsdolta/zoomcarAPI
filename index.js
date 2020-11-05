@@ -35,10 +35,10 @@ app.use(passport.session());
 
 
 // Routes
-app.use('/', require('./routes/User.js'))
-app.use('/register', require('./routes/User.js'));
-app.use('/login', require('./routes/User.js'));
-app.use('/logout', require('./routes/User.js'));
+app.use('/', require('./routes/user.js'))
+app.use('/register', require('./routes/user.js'));
+app.use('/login', require('./routes/user.js'));
+app.use('/logout', require('./routes/user.js'));
 app.use('/admin', require('./routes/admin.js'));
 app.use('/cars', require('./routes/cars.js'))
 app.use('/cars/booking', require('./routes/cars.js'))
