@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const Car = require('../Models/Car')
+const Car = require('../Models/Car.js')
 
 
 router.post('/addCar', (req, res) => {

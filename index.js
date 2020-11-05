@@ -7,12 +7,12 @@ const bodyParser = require('body-parser')
 const app = express();
 
 const env = process.env.NODE_ENV || 'development';
-const config = require('./config/config.js')[env];
+const config = require('./src/config/config.js')[env];
 
-require('./config/db')(config);
+require('./src/config/db')(config);
 
 // Passport Config
-require('./config/passport')(passport);
+require('./src/config/passport')(passport);
 
 
 app.use(cookieParser());
@@ -35,13 +35,13 @@ app.use(passport.session());
 
 
 // Routes
-app.use('/', require('./routes/user.js'))
-app.use('/register', require('./routes/user.js'));
-app.use('/login', require('./routes/user.js'));
-app.use('/logout', require('./routes/user.js'));
-app.use('/admin', require('./routes/admin.js'));
-app.use('/cars', require('./routes/cars.js'))
-app.use('/cars/booking', require('./routes/cars.js'))
+app.use('/', require('./src/routes/user.js'))
+app.use('/register', require('./src/routes/user.js'));
+app.use('/login', require('./src/routes/user.js'));
+app.use('/logout', require('./src/routes/user.js'));
+app.use('/admin', require('./src/routes/admin.js'));
+app.use('/cars', require('./src/routes/cars.js'))
+app.use('/cars/booking', require('./src/routes/cars.js'))
 
 
 
