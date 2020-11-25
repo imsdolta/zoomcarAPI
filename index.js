@@ -48,6 +48,5 @@ app.use('/cars/booking', require('./src/routes/cars.js'))
 // app.use('/users', require('./routes/users.js'));
 // app.use('/reservation/', require('./routes/reservation.js'))
 
-const PORT = process.env.PORT || 1337;
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+module.exports = app;

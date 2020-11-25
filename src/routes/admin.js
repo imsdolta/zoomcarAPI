@@ -16,7 +16,7 @@ router.post('/addCar', (req, res) => {
             console.log(obj)
             console.log("Added succesfully")
         })
-        res.status(200);
+        res.status(200).send("Car added succesfully")
     } catch (err) {
         console.log(err)
         res.status(402);
@@ -30,6 +30,7 @@ router.get('/showall', async(req, res) => {
         const cars = await Car.find({})
         res.send(cars)
     } catch (err) {
+        s
         console.log(err);
     }
 })

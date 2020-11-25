@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User');
 
 router.get('/', async(req, res) => {
-    res.json("Welcome to zoomCar.com")
+    res.json("Welcome to zoomCarAPI")
 })
 
 // @desc register 
