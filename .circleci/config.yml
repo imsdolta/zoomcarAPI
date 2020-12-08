@@ -1,7 +1,10 @@
-version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+orbs: 
+  node: circleci/node@2.0.2  
+
+version: 2.1 
+
 workflows:
-  node-tests:
+  matrix-tests:
     jobs:
-      - node/test
+      - node/test:
+          version: 12.18.3
