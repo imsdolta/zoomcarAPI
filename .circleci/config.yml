@@ -1,10 +1,10 @@
-version:  2.1
+orbs: 
+  node: circleci/node@2.0.2  
 
-orbs:
-  heroku: circleci/heroku@0.0.10
-
+version: 2.1 
 
 workflows:
-  heroku_deploy:
+  matrix-tests:
     jobs:
-      - heroku/deploy-via-git
+      - node/test:
+          version: 12.18.3
