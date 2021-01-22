@@ -80,7 +80,7 @@ router.post('/login', (req, res, next) => {
 // @route GET /logout
 router.get('/logout', (req, res) => {
     req.logout();
-    res.send("logged out")
+    res.status(200).send("logged out")
 });
 
 module.exports = router;

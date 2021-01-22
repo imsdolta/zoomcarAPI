@@ -16,10 +16,17 @@ router.post('/addCar', (req, res) => {
             console.log(obj)
             console.log("Added succesfully")
         })
-        res.status(200).send("Car added succesfully")
+        res.status(200).json({
+            "msg": "Car added succesfully",
+            "model": newCar.model
+        })
     } catch (err) {
         console.log(err)
-        res.status(402);
+
+        res.status(500).send({
+            "error": "Cannot find the cars",
+            "stack": err
+        })
     }
 
 })
@@ -28,10 +35,22 @@ router.get('/showall', async(req, res) => {
 
     try {
         const cars = await Car.find({})
-        res.send(cars)
+        if (!cars) {
+            res.json({
+                "msg": "Car could not be found"
+            })
+        }
+        if (cars) {
+            res.status(200).send(cars)
+        }
+
+
     } catch (err) {
-        s
         console.log(err);
+        res.status(500).send({
+            "error": "Cannot find the cars",
+            "stack": err
+        })
     }
 })
 
