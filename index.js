@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const session = require('express-session');
+const session = require('cookie-session');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 const app = express();
 
 const env = process.env.NODE_ENV || 'development';
@@ -31,7 +32,7 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(morgan('tiny'))
 
 
 // Routes
