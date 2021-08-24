@@ -21,65 +21,84 @@ router.get('/', ensureAuthenticated, async(req, res) => {
 // @desc  fetch all bookings for current user
 // @route GET /booking  
 router.get('/booking', ensureAuthenticated, async(req, res) => {
-    let id = req.user._id
-        // const cars = await User.find({ "user": userId}).populate('Car')
-    const cars = await rentedCar.find({ user: id }).populate('car')
+    try {
 
-    let result = []
-    if (!cars) {
-        res.send("Not found")
-    } else {
+        let id = req.user._id
+        const cars = await rentedCar.find({ user: id }).populate('car')
 
-        cars.forEach(item => {
-            result.push({
-                "model": item.car.model,
-                "price": item.car.price,
-                "booked At ": item.car.creationDate,
-                "booking Duration": item.car.days
+        let result = []
+
+        if (!cars) {
+            res.send("Not found")
+        } else {
+            cars.forEach(item => {
+                result.push({
+                    "model": item.car.model,
+                    "price": item.car.price,
+                    "booked At ": item.car.creationDate,
+                    "booking Duration": item.car.days
+                })
             })
+        }
+        res.send(result)
+
+    } catch (err) {
+        res.status(500).send({
+            "error": "Cannot find the cars",
+            "stack": err
         })
     }
-    console.log(result);
-    res.send(result)
+
 })
 
 
 // @desc  book the car given model number
 //  @route  POST /booking 
-router.post('/booking', ensureAuthenticated, (req, res) => {
-    let id = req.body.carId
-    let userId = req.user._id
-    console.log(id, userId)
+router.post('/booking', ensureAuthenticated, async(req, res) => {
+    try {
+        let id = req.body.carId
+        let userId = req.user._id
 
-    let RentedCarInfo = {}
+        const car = await Car.findById(id)
+        const user = await User.findOneAndUpdate({ userId })
 
-    Car.findOne({ model: { $eq: id } }).then(foundCar => {
-        console.log(foundCar)
-        User.findById(userId).then(user => {
-                user.rentedCars.push(foundCar._id)
-                user.save().then(() => {
-                    foundCar.isRented = true
-                    foundCar.save().then(() => {
-
-                        RentedCarInfo = {
-                            car: foundCar._id,
-                            user: userId,
-                            date: req.body.rentalDate,
-                            days: req.body.rentalDays
-                        }
-
-                        console.log(RentedCarInfo)
-                        rentedCar.create(RentedCarInfo).then(() => { //save to db
-                            res.send("car was booked")
-                        })
-                    }).catch(err => console.log(err))
-                })
+        if (!user || !car) {
+            res.status(500).json({
+                "msg": "User or car not found",
+                "user or Car": car + user
             })
-            .catch(err => {
-                if (err.code == 'E11000')
-                    res.send("Already Exist")
+        }
+
+        if (user && !car.isRented) {
+
+            const RentedCarInfo = {
+                car: car._id,
+                user: userId,
+                date: req.body.rentalDate,
+                days: req.body.rentalDays
+            }
+
+            await rentedCar.create(RentedCarInfo)
+            car.isRented = true
+            await car.save()
+
+        } else {
+            return res.json({
+                "msg": "car already rented"
             })
-    })
+        }
+
+        res.json({
+            "msg": "Car succesfully rented"
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            "msg": "Error renting car",
+            "stack": err
+        })
+    }
 })
 
 // @desc  get car given model number

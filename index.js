@@ -20,7 +20,8 @@ app.use(cookieParser());
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.set('useCreateIndex', true)
-    // Express session
+
+// Express session
 app.use(
     session({
         secret: 'secret',
@@ -44,10 +45,6 @@ app.use('/admin', require('./src/routes/admin.js'));
 app.use('/cars', require('./src/routes/cars.js'))
 app.use('/cars/booking', require('./src/routes/cars.js'))
 
-
-
-// app.use('/users', require('./routes/users.js'));
-// app.use('/reservation/', require('./routes/reservation.js'))
 
 
 module.exports = app;
